@@ -18,9 +18,15 @@ pipeline {
                 sh 'python3 test_app.py'
             }
         }
-        stage('Gotowe') {
+        stage('Uruchom aplikacje') {
             steps {
-                echo 'Pipeline zakonczona.'
+                sh '''
+                    pkill -f "python3 app.py" || true
+                    nohup python3 app.py > app.log 2>&1 &
+                    sleep 3
+                    curl -sf http://localhost:5000/ > /dev/null
+                    echo "Aplikacja dziala na porcie 5000"
+                '''
             }
         }
     }
