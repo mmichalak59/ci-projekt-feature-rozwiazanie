@@ -8,11 +8,14 @@ pipeline {
                 echo "Galaz: ${env.GIT_BRANCH}"
             }
         }
+        stage('Instalacja zaleznosci') {
+            steps {
+                sh 'pip3 install -r requirements.txt --quiet'
+            }
+        }
         stage('Testy') {
             when {
-                expression {
-                    env.GIT_BRANCH != 'origin/main'
-                }
+                expression { env.GIT_BRANCH != 'origin/main' }
             }
             steps {
                 sh 'python3 test_app.py'
